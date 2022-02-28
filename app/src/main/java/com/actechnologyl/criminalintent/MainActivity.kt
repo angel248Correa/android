@@ -1,0 +1,37 @@
+package com.actechnologyl.criminalintent
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import java.util.*
+
+private const val TAG = "mainActivity"
+
+class MainActivity : AppCompatActivity(),
+    CrimeListFragment.Callbacks        {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val currentFragement =
+            supportFragmentManager.findFragmentById(R.id.fragment_container)
+
+        if(currentFragement == null) {
+
+            val fragment = CrimeListFragment.newInstance()
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit()
+        }
+    }
+
+    override fun onCrimeSelected(crimeId: UUID) {
+        val fragment = CrimeFragement.newInstance(crimeId)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+}
